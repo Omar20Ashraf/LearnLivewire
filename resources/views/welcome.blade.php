@@ -5,11 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+    @vite('resources/css/app.css')
     @livewireStyles
 </head>
 <body>
 
-    @livewire('counter')
+    <h1 class="text-3xl font-bold underline">
+        Hello world!
+    </h1>
     @livewireScripts
 </body>
 </html>
