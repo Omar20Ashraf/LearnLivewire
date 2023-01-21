@@ -33,6 +33,8 @@ class Comments extends Component
         $this->comments->prepend($createdComment);
 
         $this->newComment = '';
+
+        session()->flash('message', 'Comment added successfully 😁');
     }
 
     public function updated($propertyName)
@@ -40,14 +42,14 @@ class Comments extends Component
         $this->validateOnly($propertyName);
     }
 
-
-    public function remove($commentId)
+    public function remove(Comment $comment)
     {
         # code...
-        $comment = Comment::find($commentId);
-        $this->comments = $this->comments->except($commentId);
+        $this->comments = $this->comments->except($comment->id);
 
         $comment->delete();
+
+        session()->flash('message', 'Comment deleted successfully 😊');
     }
 
     public function render()
