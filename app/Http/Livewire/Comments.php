@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use Carbon\Carbon;
 use App\Models\Comment;
 use Livewire\Component;
 
@@ -17,11 +16,14 @@ class Comments extends Component
         $this->comments = Comment::latest()->get();
     }
 
+    protected $rules = [
+        'newComment' => 'required|string|max:225',
+    ];
+
     public function addComment()
     {
         # code...
-        if($this->newComment == '')
-            return ;
+        $this->validate();
 
         $createdComment = Comment::create([
             'user_id' =>1,
@@ -31,6 +33,11 @@ class Comments extends Component
         $this->comments->prepend($createdComment);
 
         $this->newComment = '';
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function render()
