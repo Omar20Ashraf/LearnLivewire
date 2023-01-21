@@ -40,6 +40,16 @@ class Comments extends Component
         $this->validateOnly($propertyName);
     }
 
+
+    public function remove($commentId)
+    {
+        # code...
+        $comment = Comment::find($commentId);
+        $this->comments = $this->comments->except($commentId);
+
+        $comment->delete();
+    }
+
     public function render()
     {
         return view('livewire.comments');
