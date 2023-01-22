@@ -14,6 +14,7 @@ class Comment extends Model
 
     protected $fillable = [
         'user_id',
+        'support_ticket_id',
         'body',
         'image',
     ];
@@ -28,5 +29,11 @@ class Comment extends Model
     {
         # code...
         return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function ticket()
+    {
+        # code...
+        return $this->belongsTo(SupportTicket::class, 'support_ticket_id');
     }
 }

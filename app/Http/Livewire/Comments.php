@@ -6,6 +6,7 @@ use App\Models\Comment;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use App\Models\SupportTicket;
 use Livewire\WithFileUploads;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -17,11 +18,20 @@ class Comments extends Component
     public $newComment;
     public $image;
     public $fileUploaded = 0;
+    public $ticketId;
+
+    protected $listeners = ['ticketSelected'];
 
     protected $rules = [
         'newComment' => 'required|string|max:225',
         'image' => 'nullable|image',
     ];
+
+    public function ticketSelected($ticketId)
+    {
+        # code...
+        $this->ticketId = $ticketId;
+    }
 
     public function addComment()
     {
@@ -32,6 +42,7 @@ class Comments extends Component
 
         Comment::create([
             'user_id' =>1,
+            'support_ticket_id' => $this->ticketId,
             'body' => $this->newComment,
             'image' => $image,
         ]);
@@ -39,7 +50,6 @@ class Comments extends Component
         $this->newComment = '';
         $this->image      = null;
         $this->fileUploaded++;
-        $this->cleanupOldUploads();
 
         session()->flash('message', 'Comment added successfully 😁');
     }
@@ -74,8 +84,13 @@ class Comments extends Component
 
     public function render()
     {
+        $tickets = SupportTicket::all();
+
+        if (empty($this->ticketId) && count($tickets) > 0)
+            $this->ticketId = $tickets->first()->id;
+
         return view('livewire.comments',[
-            'comments' => Comment::latest()->paginate(2)
+            'comments' => Comment::where('support_ticket_id',$this->ticketId)->latest()->paginate(2)
         ]);
     }
 }
