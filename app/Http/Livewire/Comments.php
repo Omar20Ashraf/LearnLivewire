@@ -39,6 +39,7 @@ class Comments extends Component
         $this->newComment = '';
         $this->image      = null;
         $this->fileUploaded++;
+        $this->cleanupOldUploads();
 
         session()->flash('message', 'Comment added successfully 😁');
     }
