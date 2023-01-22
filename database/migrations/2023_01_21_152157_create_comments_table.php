@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->text('body');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
